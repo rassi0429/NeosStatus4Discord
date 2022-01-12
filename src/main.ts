@@ -38,6 +38,10 @@ client.on('ready', () => {
     console.log(`Logged in as ${client.user?.tag}!`);
 });
 
+client.on("guildCreate", guild => {
+    setUpCommand(guild.id, "930277128212217926", discord_token)
+})
+
 client.on('interactionCreate', async (interaction: Interaction) => {
     if (!interaction.isCommand()) return;
     console.log(interaction.commandName)
