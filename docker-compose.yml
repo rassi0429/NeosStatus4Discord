@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+  node:
+    build: .
+    init: true
+    restart: on-failure:3
+    environment:
+      - DISCORD_TOKEN=YOUR_DISCORD_TOKEN_IS_HERE
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - ./db:/app/db
