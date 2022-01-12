@@ -1,0 +1,28 @@
+{
+  "name": "neosstatus4discord",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/main.js",
+  "scripts": {
+    "start": "tsc && node build/main.js",
+    "build": "tsc",
+    "dev": "tsc -w",
+    "ndev": "nodemon build/src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/rest": "^0.1.0-canary.0",
+    "@types/express": "^4.17.13",
+    "@types/node": "^16.9.2",
+    "axios": "^0.24.0",
+    "body-parser": "^1.19.0",
+    "discord-api-types": "^0.23.1",
+    "discord.js": "^13.1.0",
+    "express": "^4.17.1",
+    "sqlite3": "^5.0.2",
+    "typeorm": "^0.2.37",
+    "typescript": "^4.4.3"
+  }
+}
