@@ -133,7 +133,11 @@ client.on('interactionCreate', async (interaction: Interaction) => {
                     return ""
                 }
             }) || ["なんかバグってそう"])
-            await interaction.editReply(result.filter((r) => !!r).join("\n"))
+            if(result.filter((r) => !!r).length !== 0) {
+                await interaction.editReply(result.filter((r) => !!r).join("\n"))
+            } else {
+                await interaction.editReply("ユーザが見つかりません。")
+            }
             break
         default:
             break;
