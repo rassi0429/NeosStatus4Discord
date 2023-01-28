@@ -104,7 +104,9 @@ client.on('interactionCreate', async (interaction: Interaction) => {
                     neosUserId: neosuserid
                 })
                 server.users.push(newUser)
+                newUser.servers.push(server)
                 await serverRepository?.save(server)
+                await userRepository?.save(newUser)
                 const reply = await interaction.reply({content: 'OK', fetchReply: true})
                 setTimeout(() => {
                     if ((reply as Message).deletable) {
@@ -171,7 +173,7 @@ async function updateUserState() {
                 }
             }
         } catch (e) {
-            console.log(e)
+            // console.log(e)
         } finally {
             await sleep(500)
         }
