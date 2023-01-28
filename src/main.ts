@@ -121,12 +121,16 @@ client.on('interactionCreate', async (interaction: Interaction) => {
         case "list":
             const s = await serverRepository.findOne({where: {serverId: interaction.guildId}, relations: ["users"]})
             const result = await Promise.all(s?.users.map(async (u) => {
-                const status = getEmoji(u.neosStatus)
-                const gUser = await interaction.guild?.members.fetch(u.discordId)
-                const userTag = await gUser?.user.tag
-                return `${status} ${u.neosUserId} (${userTag || "???"})`
+                try {
+                    const status = getEmoji(u.neosStatus)
+                    const gUser = await interaction.guild?.members.fetch(u.discordId)
+                    const userTag = await gUser?.user.tag
+                    return `${status} ${u.neosUserId} (${userTag || "???"})`
+                } catch {
+                    return ""
+                }
             }) || ["なんかバグってそう"])
-            await interaction.reply(result.join("\n"))
+            await interaction.reply(result.filter((r) => !!r).join("\n"))
             break
         default:
             break;
