@@ -119,6 +119,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
             await interaction.reply("OK")
             break
         case "list":
+            await interaction.deferReply();
             const s = await serverRepository.findOne({where: {serverId: interaction.guildId}, relations: ["users"]})
             const result = await Promise.all(s?.users.map(async (u) => {
                 try {
@@ -130,7 +131,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
                     return ""
                 }
             }) || ["なんかバグってそう"])
-            await interaction.reply(result.filter((r) => !!r).join("\n"))
+            await interaction.editReply(result.filter((r) => !!r).join("\n"))
             break
         default:
             break;
