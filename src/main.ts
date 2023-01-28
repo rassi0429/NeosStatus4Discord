@@ -34,8 +34,9 @@ if (!discord_token) {
 
 const client = new Client({intents: [Intents.FLAGS.GUILDS]});
 
-client.on('ready', () => {
+client.on('ready', (client) => {
     console.log(`Logged in as ${client.user?.tag}!`);
+    setUpCommand("606109479003750440", client.application.id , discord_token)
 });
 
 client.on("guildCreate", guild => {
@@ -104,18 +105,17 @@ client.on('interactionCreate', async (interaction: Interaction) => {
                     neosUserId: neosuserid
                 })
                 server.users.push(newUser)
-                newUser.servers.push(server)
                 await serverRepository?.save(server)
-                await userRepository?.save(newUser)
                 const reply = await interaction.reply({content: 'OK', fetchReply: true})
                 setTimeout(() => {
                     if ((reply as Message).deletable) {
                         (reply as Message).delete()
                     }
                 }, 5000)
-
                 return
             }
+            server.users.push(user)
+            await serverRepository?.save(server)
             user.neosUserId = neosuserid
             await userRepository.save(user)
             await interaction.reply("OK")
@@ -123,6 +123,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
         case "list":
             await interaction.deferReply();
             const s = await serverRepository.findOne({where: {serverId: interaction.guildId}, relations: ["users"]})
+            // console.log(s)
             const result = await Promise.all(s?.users.map(async (u) => {
                 try {
                     const status = getEmoji(u.neosStatus)
@@ -216,6 +217,5 @@ function getEmoji(s: string) {
     return status
 }
 
-setUpCommand("918650818993979394", "930277128212217926", discord_token)
 
 client.login(discord_token);
