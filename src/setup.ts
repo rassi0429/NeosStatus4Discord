@@ -47,6 +47,17 @@ export function setUpCommand(serverID: string, applicationId: string, token: str
                 type: 6
             }
         ]
+    },{
+        name: 'removeuser',
+        description: '監視を解除します',
+        options: [
+            {
+                name: "discord",
+                required: false,
+                description: "ユーザ(Discord)",
+                type: 6
+            }
+        ]
     }, {
         name: 'status',
         description: 'Neosのユーザのステータスを取得します',

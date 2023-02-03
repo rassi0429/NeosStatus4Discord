@@ -34,9 +34,14 @@ if (!discord_token) {
 
 const client = new Client({intents: [Intents.FLAGS.GUILDS]});
 
-client.on('ready', (client) => {
+client.on('ready', async (client) => {
     console.log(`Logged in as ${client.user?.tag}!`);
     setUpCommand("606109479003750440", client.application.id , discord_token)
+    const serverRepository = await connection?.getRepository(Server)
+    const servers = await serverRepository?.find()
+    servers?.forEach(server => {
+        setUpCommand(server.serverId, "930277128212217926", discord_token)
+    })
 });
 
 client.on("guildCreate", guild => {
@@ -118,6 +123,19 @@ client.on('interactionCreate', async (interaction: Interaction) => {
             await serverRepository?.save(server)
             user.neosUserId = neosuserid
             await userRepository.save(user)
+            await interaction.reply("OK")
+            break
+        case "removeuser":
+            const discordId2 = (interaction.options.get("discord")?.value || "") + ""
+            let server2 = await serverRepository.findOne({where: {serverId: interaction.guildId}, relations: ["users"]})
+            if (!server2) {
+                await interaction.reply("Botの初期設定が完了していないようです。サーバ管理者に報告してください。")
+                return
+            }
+            let user2 = await userRepository.findOne({where: {discordId: discordId2 || interaction.user.id}})
+            if(user2) {
+                await userRepository.delete(user2)
+            }
             await interaction.reply("OK")
             break
         case "list":
