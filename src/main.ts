@@ -135,6 +135,18 @@ client.on('interactionCreate', async (interaction: Interaction) => {
             let user2 = await userRepository.findOne({where: {discordId: discordId2 || interaction.user.id}})
             if(user2) {
                 await userRepository.delete(user2)
+                if (server2.onlineRole) {
+                    const discordServer = await client.guilds.fetch(server2.serverId)
+                    const discordUser: GuildMember | undefined | null = await discordServer.members.fetch(user2.discordId)
+                    if (!discordUser) {
+                        await interaction.reply("ゆーざが存在しないようです")
+                        return
+                    }
+                    await discordUser.roles.remove(server2.onlineRole)
+                    if (server2.offlineRole) {
+                        await discordUser.roles.remove(server2.offlineRole)
+                    }
+                }
             }
             await interaction.reply("OK")
             break
