@@ -134,7 +134,11 @@ client.on('interactionCreate', async (interaction: Interaction) => {
             }
             let user2 = await userRepository.findOne({where: {discordId: discordId2 || interaction.user.id}})
             if(user2) {
-                await userRepository.delete(user2)
+                const newUsers = server2.users.filter(u => u.discordId !== discordId2)
+                await serverRepository.save({
+                    ...server2,
+                    users: newUsers
+                })
                 if (server2.onlineRole) {
                     const discordServer = await client.guilds.fetch(server2.serverId)
                     const discordUser: GuildMember | undefined | null = await discordServer.members.fetch(user2.discordId)
