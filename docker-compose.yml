@@ -6,6 +6,7 @@ services:
     restart: on-failure:3
     environment:
       - DISCORD_TOKEN=YOUR_DISCORD_TOKEN_IS_HERE
+      - NEOS_HOST=cloudx.azurewebsites.net
     ports:
       - "127.0.0.1:3000:3000"
     volumes:

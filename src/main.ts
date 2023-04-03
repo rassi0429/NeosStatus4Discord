@@ -73,7 +73,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
                 userId = user?.neosUserId
             }
             try {
-                const {data} = await axios.get(`https://api.neos.com/api/users/${userId}/status`)
+                const {data} = await axios.get(`https://${process.env.NEOS_HOST}/api/users/${userId}/status`)
                 await interaction.reply(`${userId}さんのNeosのステータス : ${getEmoji(data.onlineStatus)} ${data.onlineStatus}`)
             } catch {
                 await interaction.reply("エラーが発生しました。たぶんユーザがおらん")
@@ -181,7 +181,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
 
 async function updateUserState() {
     console.log("updateUserState")
-    const url = (userId: string) => `https://api.neos.com/api/users/${userId}/status`
+    const url = (userId: string) => `https://${process.env.NEOS_HOST}/api/users/${userId}/status`
     const userRepository = await connection?.getRepository(User)
     if (!userRepository) return
     const users = await userRepository.find({relations: ["servers"]})
